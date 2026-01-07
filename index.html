@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#ff4d6d" />
+  <meta name="color-scheme" content="dark" />
+  <title>For You ❤️</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+  <!-- No external font required; keeps GitHub Pages simple & fast -->
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <!-- Ambient background -->
+  <div class="bg" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+
+  <!-- Floating butterflies -->
+  <div class="butterflies" id="butterflies" aria-hidden="true"></div>
+
+  <!-- App -->
+  <main class="app" id="app">
+    <header class="hero">
+      <div class="hero__badge" aria-hidden="true">❤️</div>
+      <div class="hero__text">
+        <h1 class="hero__title">Hey, <span id="herName">my love</span></h1>
+        <p class="hero__sub">I made this for you—soft, romantic, and real.</p>
+      </div>
+
+      <div class="hero__meta">
+        <div class="pill" id="statusPill" aria-live="polite">
+          <span class="dot"></span>
+          <span id="statusText">Ready when you are</span>
+        </div>
+      </div>
+    </header>
+
+    <nav class="progress" aria-label="Journey progress">
+      <ol class="progress__list" id="progressList">
+        <li class="progress__item is-active" data-step="start">Start</li>
+        <li class="progress__item" data-step="letter">Letter</li>
+        <li class="progress__item" data-step="memories">Memories</li>
+        <li class="progress__item" data-step="reasons">Reasons</li>
+        <li class="progress__item" data-step="ask">Ask</li>
+        <li class="progress__item" data-step="yay">Yay</li>
+      </ol>
+    </nav>
+
+    <section class="card" id="startCard" data-step="start">
+      <h2 class="card__title">A tiny journey</h2>
+      <p class="card__text">
+        Put on a song you love. Take a slow breath.
+        When you’re ready, tap <span class="accent">Begin</span>.
+      </p>
+
+      <div class="card__actions">
+        <button class="btn" id="startBtn">Begin ✨</button>
+        <button class="btn btn--ghost" id="customizeBtn">Personalize</button>
+      </div>
+
+      <div class="card__fineprint">
+        <p class="fine">Best on mobile. Little surprises included.</p>
+        <p class="fine">Tip: You can share this link directly once published.</p>
+      </div>
+    </section>
+
+    <section class="card is-hidden" id="letterCard" data-step="letter">
+      <div class="card__head">
+        <h2 class="card__title">My letter to you</h2>
+        <div class="card__tools">
+          <button class="chipbtn" id="typingToggleBtn" aria-pressed="true" title="Toggle typing animation">
+            Typing: On
+          </button>
+          <button class="chipbtn" id="copyLetterBtn" title="Copy this letter">Copy</button>
+        </div>
+      </div>
+
+      <p class="letter" id="letterText"></p>
+
+      <div class="card__actions">
+        <button class="btn" id="toMemoriesBtn">Open Memory Lane 🫶</button>
+        <button class="btn btn--ghost" id="skipTypingBtn">Show all</button>
+      </div>
+    </section>
+
+    <section class="card is-hidden" id="memoriesCard" data-step="memories">
+      <div class="card__head">
+        <h2 class="card__title">Memory Lane</h2>
+        <div class="card__tools">
+          <button class="chipbtn" id="shuffleMemoriesBtn" title="Shuffle the memories">Shuffle</button>
+        </div>
+      </div>
+
+      <p class="card__text soft">
+        Tap each memory. I tucked a feeling inside every one.
+      </p>
+
+      <div class="grid" id="memoriesGrid" role="list"></div>
+
+      <div class="card__actions">
+        <button class="btn" id="toReasonsBtn">One more thing…</button>
+        <button class="btn btn--ghost" id="backToLetterBtn">Back</button>
+      </div>
+    </section>
+
+    <section class="card is-hidden" id="reasonsCard" data-step="reasons">
+      <h2 class="card__title">Reasons I love you</h2>
+      <p class="card__text soft">
+        Tap each one to reveal. This is just a tiny fraction.
+      </p>
+
+      <div class="reasons" id="reasonsWrap"></div>
+
+      <div class="card__actions">
+        <button class="btn" id="toAskBtn">The question 💌</button>
+        <button class="btn btn--ghost" id="backToMemoriesBtn">Back</button>
+      </div>
+    </section>
+
+    <section class="card is-hidden" id="askCard" data-step="ask">
+      <h2 class="card__title">So…</h2>
+      <p class="big">Will you be my Valentine? ❤️</p>
+
+      <div class="card__actions">
+        <button class="btn btn--yes" id="yesBtn">Yes</button>
+        <button class="btn btn--no" id="noBtn">Not yet</button>
+      </div>
+
+      <p class="fine" id="tinyHint" aria-live="polite"></p>
+    </section>
+
+    <section class="card is-hidden" id="yayCard" data-step="yay">
+      <h2 class="card__title">Yay 🥹❤️</h2>
+      <p class="card__text soft">You just made my whole heart smile.</p>
+      <p class="final" id="finalLine"></p>
+
+      <div class="card__actions">
+        <button class="btn" id="replayBtn">Replay ✨</button>
+        <button class="btn btn--ghost" id="copyLinkBtn">Copy link</button>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <span id="signature">— yours, always</span>
+    </footer>
+  </main>
+
+  <!-- Sunflower field (SVG scene) -->
+  <div class="sunfield" aria-hidden="true">
+    <svg class="sunfield__svg" viewBox="0 0 1440 420" preserveAspectRatio="none" role="presentation">
+      <defs>
+        <linearGradient id="gSkyFade" x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0%" stop-color="rgba(255,143,171,0.18)"/>
+          <stop offset="55%" stop-color="rgba(255,143,171,0)"/>
+          <stop offset="100%" stop-color="rgba(0,0,0,0)"/>
+        </linearGradient>
+
+        <linearGradient id="gLeaf" x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0%" stop-color="#1f7a43"/>
+          <stop offset="55%" stop-color="#0f4a2a"/>
+          <stop offset="100%" stop-color="#0a2e1b"/>
+        </linearGradient>
+
+        <radialGradient id="gPetal" cx="35%" cy="35%" r="80%">
+          <stop offset="0%" stop-color="#fff1b9"/>
+          <stop offset="55%" stop-color="#ffd057"/>
+          <stop offset="100%" stop-color="#f2a41d"/>
+        </radialGradient>
+
+        <radialGradient id="gPetal2" cx="40%" cy="35%" r="80%">
+          <stop offset="0%" stop-color="#ffeab0"/>
+          <stop offset="60%" stop-color="#ffc64a"/>
+          <stop offset="100%" stop-color="#e79210"/>
+        </radialGradient>
+
+        <radialGradient id="gSeed" cx="35%" cy="35%" r="70%">
+          <stop offset="0%" stop-color="#8a4a26"/>
+          <stop offset="60%" stop-color="#4a2412"/>
+          <stop offset="100%" stop-color="#2a130b"/>
+        </radialGradient>
+
+        <filter id="fSoftShadow" x="-30%" y="-30%" width="160%" height="160%">
+          <feGaussianBlur in="SourceAlpha" stdDeviation="6" result="blur"/>
+          <feOffset dx="0" dy="8" result="off"/>
+          <feColorMatrix in="off" type="matrix"
+            values="0 0 0 0 0
+                    0 0 0 0 0
+                    0 0 0 0 0
+                    0 0 0 .35 0" result="shadow"/>
+          <feMerge>
+            <feMergeNode in="shadow"/>
+            <feMergeNode in="SourceGraphic"/>
+          </feMerge>
+        </filter>
+
+        <!-- A “real” sunflower: petals, center, subtle seeds, leaves -->
+        <g id="sunFlowerArt">
+          <!-- petals back layer -->
+          <g opacity="0.95">
+            <!-- 18 petals via rotation -->
+            <g>
+              <ellipse cx="0" cy="-36" rx="10.5" ry="23" fill="url(#gPetal)"/>
+              <ellipse cx="0" cy="-36" rx="10.5" ry="23" fill="url(#gPetal)" transform="rotate(20)"/>
+              <ellipse cx="0" cy="-36" rx="10.5" ry="23" fill="url(#gPetal)" transform="rotate(40)"/>
+              <ellipse cx="0" cy="-36" rx="10.5" ry="23" fill="url(#gPetal)" transform="rotate(60)"/>
+              <ellipse cx="0" cy="-36" rx="10.5" ry="23" fill="url(#gPetal)" transform="rotate(80)"/>
+              <ellipse cx="0" cy="-36" rx="10.5" ry="23" fill="url(#gPetal)" transform="rotate(100)"/>
+              <ellipse cx="0" cy="-36" rx="10.5" ry="23" fill="url(#gPetal)" transform="rotate(120)"/>
+              <ellipse cx="0" cy="-36" rx="10.5" ry="23" fill="url(#gPetal)" transform="rotate(140)"/>
+              <ellipse cx="0" cy="-36" rx="10.5" ry="23" fill="url(#gPetal)" transform="rotate(160)"/>
+            </g>
+            <!-- inner petals -->
+            <g transform="scale(0.92)" opacity="0.9">
+              <ellipse cx="0" cy="-34" rx="9.4" ry="20.5" fill="url(#gPetal2)"/>
+              <ellipse cx="0" cy="-34" rx="9.4" ry="20.5" fill="url(#gPetal2)" transform="rotate(20)"/>
+              <ellipse cx="0" cy="-34" rx="9.4" ry="20.5" fill="url(#gPetal2)" transform="rotate(40)"/>
+              <ellipse cx="0" cy="-34" rx="9.4" ry="20.5" fill="url(#gPetal2)" transform="rotate(60)"/>
+              <ellipse cx="0" cy="-34" rx="9.4" ry="20.5" fill="url(#gPetal2)" transform="rotate(80)"/>
+              <ellipse cx="0" cy="-34" rx="9.4" ry="20.5" fill="url(#gPetal2)" transform="rotate(100)"/>
+              <ellipse cx="0" cy="-34" rx="9.4" ry="20.5" fill="url(#gPetal2)" transform="rotate(120)"/>
+              <ellipse cx="0" cy="-34" rx="9.4" ry="20.5" fill="url(#gPetal2)" transform="rotate(140)"/>
+              <ellipse cx="0" cy="-34" rx="9.4" ry="20.5" fill="url(#gPetal2)" transform="rotate(160)"/>
+            </g>
+          </g>
+
+          <!-- center -->
+          <circle r="22.5" fill="url(#gSeed)"/>
+          <circle r="18" fill="rgba(255,255,255,0.05)"/>
+
+          <!-- seeds -->
+          <g opacity="0.42" fill="#1b0d08">
+            <circle cx="-6" cy="-7" r="1.6"/>
+            <circle cx="6" cy="-6" r="1.5"/>
+            <circle cx="3" cy="5" r="1.6"/>
+            <circle cx="-7" cy="7" r="1.4"/>
+            <circle cx="9" cy="8" r="1.2"/>
+            <circle cx="-2" cy="1" r="1.5"/>
+            <circle cx="0" cy="-1" r="1.2"/>
+            <circle cx="-9" cy="-1" r="1.1"/>
+            <circle cx="10" cy="1" r="1.0"/>
+          </g>
+
+          <!-- tiny leaf hint -->
+          <path d="M-26,18 C-44,10 -44,30 -26,30 C-14,30 -12,23 -26,18 Z"
+            fill="rgba(55,160,95,0.55)"/>
+          <path d="M26,18 C44,10 44,30 26,30 C14,30 12,23 26,18 Z"
+            fill="rgba(55,160,95,0.45)"/>
+        </g>
+      </defs>
+
+      <!-- soft glow on top of field -->
+      <rect x="0" y="0" width="1440" height="420" fill="url(#gSkyFade)"/>
+
+      <!-- leafy base -->
+      <path d="M0,190 C160,150 320,240 520,190 C720,140 900,260 1100,190 C1260,145 1360,220 1440,185
+               L1440,420 L0,420 Z"
+            fill="url(#gLeaf)"/>
+
+      <!-- distant row -->
+      <g opacity="0.55" filter="url(#fSoftShadow)">
+        <g transform="translate(120 205) scale(0.62) rotate(-6)"><use href="#sunFlowerArt"/></g>
+        <g transform="translate(300 200) scale(0.58) rotate(8)"><use href="#sunFlowerArt"/></g>
+        <g transform="translate(500 210) scale(0.64) rotate(-10)"><use href="#sunFlowerArt"/></g>
+        <g transform="translate(720 202) scale(0.60) rotate(6)"><use href="#sunFlowerArt"/></g>
+        <g transform="translate(920 212) scale(0.66) rotate(-4)"><use href="#sunFlowerArt"/></g>
+        <g transform="translate(1120 200) scale(0.58) rotate(10)"><use href="#sunFlowerArt"/></g>
+        <g transform="translate(1320 212) scale(0.62) rotate(-6)"><use href="#sunFlowerArt"/></g>
+      </g>
+
+      <!-- main row (bigger, richer) -->
+      <g filter="url(#fSoftShadow)">
+        <g transform="translate(70 310) scale(0.92) rotate(6)"><use href="#sunFlowerArt"/></g>
+        <g transform="translate(230 325) scale(1.05) rotate(-8)"><use href="#sunFlowerArt"/></g>
+        <g transform="translate(410 318) scale(0.98) rotate(10)"><use href="#sunFlowerArt"/></g>
+        <g transform="translate(600 332) scale(1.16) rotate(-4)"><use href="#sunFlowerArt"/></g>
+        <g transform="translate(790 320) scale(1.02) rotate(8)"><use href="#sunFlowerArt"/></g>
+        <g transform="translate(980 332) scale(1.18) rotate(-10)"><use href="#sunFlowerArt"/></g>
+        <g transform="translate(1170 320) scale(1.02) rotate(6)"><use href="#sunFlowerArt"/></g>
+        <g transform="translate(1360 334) scale(1.20) rotate(-6)"><use href="#sunFlowerArt"/></g>
+      </g>
+
+      <!-- gentle mist edge -->
+      <path d="M0,180 C200,220 360,150 540,190 C740,240 980,150 1160,200 C1320,240 1400,170 1440,200"
+            fill="rgba(255,255,255,0.05)"/>
+    </svg>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast" aria-live="polite"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
